@@ -19,7 +19,7 @@ import plotly.express as px
 def page_group_members():
     st.title("Breast Cancer Diagnosis Prediction")
     st.title("Introduction")
-    st.title("Notebook for Group 2's Final Year Project's Data Analysis/Machine Learning Component\n\nComputer Science Department, School of Computing and Engineering Sciences, Babcock University, Ilishan-Remo, Ogun State, Nigeria.\n\nGroup 2 Members:\n\n1. Ogunsusi, Adetunji Gabriel 19/2500\n2. Okoye, Adaora Jessica 19/0686\n3. Sawo, Collins 19/1080\n\nGroup Project Supervisor: Ernest E. Onuiri, PHD\n\r")
+    st.title("App for Group 2's Final Year Project's Data Analysis/Machine Learning Component\n\nComputer Science Department, School of Computing and Engineering Sciences, Babcock University, Ilishan-Remo, Ogun State, Nigeria.\n\nGroup 2 Members:\n\n1. Ogunsusi, Adetunji Gabriel 19/2500\n2. Okoye, Adaora Jessica 19/0686\n3. Sawo, Collins 19/1080\n\nGroup Project Supervisor: Ernest E. Onuiri, PHD\n\r")
     # Load image from URL
     url = "https://images.pexels.com/photos/5702171/pexels-photo-5702171.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
     st.image(url, caption=" ")
