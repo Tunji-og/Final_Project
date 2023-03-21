@@ -116,16 +116,22 @@ def predict_diagnosis(data):
     X_new = pd.DataFrame(data, index=[0])
     preprocessor = load_preprocessor() # load preprocessor from pickle file
     X_new = X_new.fillna(0)
-    feature_names_in = preprocessor.get_feature_names_in()
+    
+    # extract the ColumnTransformer object and feature names
+    column_transformer = preprocessor.named_transformers_['preprocessor']
+    feature_names_in = column_transformer.get_feature_names_in()
+    
     # check if all feature names are present in X_new
     if not set(feature_names_in).issubset(set(X_new.columns)):
         missing_features = set(feature_names_in) - set(X_new.columns)
         raise ValueError("Missing features in input data: {}".format(missing_features))
+    
     X_new = preprocessor.transform(X_new)
-    feature_names_out = preprocessor.get_feature_names_out() # call get_feature_names_out directly on preprocessor
+    feature_names_out = column_transformer.get_feature_names_out() # extract feature names from ColumnTransformer
     svm_model = load_svm_model() # load SVM model from pickle file
     y_pred = svm_model.predict(X_new)
     return y_pred[0], feature_names_out
+
 # def predict_diagnosis(data):
 #     X_new = pd.DataFrame(data, index=[0])
 #     preprocessor = load_preprocessor() # load preprocessor from pickle file
@@ -152,14 +158,68 @@ def page_predictions():
     area_mean = st.slider("Area Mean", 143.5, 2501.0, 654.89)
     concavity_mean = st.slider("Concavity Mean", 0.0, 0.4275, 0.1)
     concave_points_mean = st.slider("Concave Points Mean", 0.0, 0.2012, 0.1)
+    symmetry_mean = st.slider("Symmetry Mean", 0.106, 0.304, 0.179)
+    fractal_dimension_mean = st.slider("Fractal Dimension Mean", 0.04996, 0.09744, 0.0628)
+    radius_se = st.slider("Radius SE", 0.1115, 2.873, 0.4985)
+    texture_se = st.slider("Texture SE", 0.3602, 4.885, 1.248)
+    perimeter_se = st.slider("Perimeter SE", 0.757, 21.98, 2.866)
+    area_se = st.slider("Area SE", 6.802, 542.2, 40.32)
+    smoothness_se = st.slider("Smoothness SE", 0.001713, 0.03113, 0.00875)
+    compactness_se = st.slider("Compactness SE", 0.002252, 0.1354, 0.03241)
+    concavity_se = st.slider("Concavity SE", 0.0, 0.396, 0.04112)
+    concave_points_se = st.slider("Concave Points SE", 0.0, 0.05279, 0.02184)
+    symmetry_se = st.slider("Symmetry SE", 0.007882, 0.07895, 0.02059)
+    fractal_dimension_se = st.slider("Fractal Dimension SE", 0.0008948, 0.02984, 0.006153)
+    radius_worst = st.slider("Radius Worst", 7.93, 36.04, 19.38)
+    texture_worst = st.slider("Texture Worst", 12.02, 49.54, 25.54)
+    perimeter_worst = st.slider("Perimeter Worst", 50.41, 251.2, 122.8)
+    area_worst = st.slider("Area Worst", 185.2, 4254.0, 843.7)
+    smoothness_worst = st.slider("Smoothness Worst", 0.07117, 0.2226, 0.1559)
+    compactness_worst = st.slider("Compactness Worst", 0.02729, 1.058, 0.3459)
+    smoothness_mean = st.slider("Smoothness Mean", 0.05263, 0.1634, 0.096)
+    compactness_mean = st.slider("Compactness Mean", 0.01938, 0.3454, 0.104)
+    concavity_worst = st.slider("Concavity Worst", 0.0, 1.252, 0.3)
+    concave_points_worst = st.slider("Concave Points Worst", 0.0, 0.291, 0.1)
+    symmetry_worst = st.slider("Symmetry Worst", 0.1565, 0.6638, 0.3)
+    fractal_dimension_worst = st.slider("Fractal Dimension Worst", 0.05504, 0.2075, 0.1)
+
+
+
+
 
     # Get the user input and make a prediction
     data = {'radius_mean': radius_mean,
-            'texture_mean': texture_mean,
-            'perimeter_mean': perimeter_mean,
-            'area_mean': area_mean,
-            'concavity_mean': concavity_mean,
-            'concave points_mean': concave_points_mean}
+        'texture_mean': texture_mean,
+        'perimeter_mean': perimeter_mean,
+        'area_mean': area_mean,
+        'smoothness_mean': smoothness_mean,
+        'compactness_mean': compactness_mean,
+        'concavity_mean': concavity_mean,
+        'concave points_mean': concave_points_mean,
+        'symmetry_mean': symmetry_mean,
+        'fractal_dimension_mean': fractal_dimension_mean,
+        'radius_se': radius_se,
+        'texture_se': texture_se,
+        'perimeter_se': perimeter_se,
+        'area_se': area_se,
+        'smoothness_se': smoothness_se,
+        'compactness_se': compactness_se,
+        'concavity_se': concavity_se,
+        'concave points_se': concave_points_se,
+        'symmetry_se': symmetry_se,
+        'fractal_dimension_se': fractal_dimension_se,
+        'radius_worst': radius_worst,
+        'texture_worst': texture_worst,
+        'perimeter_worst': perimeter_worst,
+        'area_worst': area_worst,
+        'smoothness_worst': smoothness_worst,
+        'compactness_worst': compactness_worst,
+        'concavity_worst': concavity_worst,
+        'concave points_worst': concave_points_worst,
+        'symmetry_worst': symmetry_worst,
+        'fractal_dimension_worst': fractal_dimension_worst
+        }
+
     diagnosis = predict_diagnosis(data)
 
     # Display the prediction to the user
