@@ -99,29 +99,51 @@ def page_data_description():
 
 
 # Define function for page 2: Predictions
+
+def load_preprocessor():
+    with open('scaler.pkl', 'rb') as f:
+        preprocessor = pickle.load(f)
+    return preprocessor
+
+def load_svm_model():
+    with open('svm_model.pkl', 'rb') as f:
+        svm_model = pickle.load(f)
+    return svm_model
+
+# Define a function to make predictions on new data
+
+def predict_diagnosis(data):
+    X_new = pd.DataFrame(data, index=[0])
+    preprocessor = load_preprocessor() # load preprocessor from pickle file
+    X_new = X_new.fillna(0)
+    feature_names_in = preprocessor.get_feature_names_in()
+    # check if all feature names are present in X_new
+    if not set(feature_names_in).issubset(set(X_new.columns)):
+        missing_features = set(feature_names_in) - set(X_new.columns)
+        raise ValueError("Missing features in input data: {}".format(missing_features))
+    X_new = preprocessor.transform(X_new)
+    feature_names_out = preprocessor.get_feature_names_out() # call get_feature_names_out directly on preprocessor
+    svm_model = load_svm_model() # load SVM model from pickle file
+    y_pred = svm_model.predict(X_new)
+    return y_pred[0], feature_names_out
+# def predict_diagnosis(data):
+#     X_new = pd.DataFrame(data, index=[0])
+#     preprocessor = load_preprocessor() # load preprocessor from pickle file
+#     X_new = X_new.fillna(0)
+#     X_new = preprocessor.transform(X_new)
+#     feature_names = preprocessor.named_transformers_['preprocess'].named_steps['ct'].get_feature_names_out() 
+#     svm_model = load_svm_model() # load SVM model from pickle file
+#     y_pred = svm_model.predict(X_new)
+#     return y_pred[0], feature_names
+
+
+
 def page_predictions():
     st.title("Predictions")
     st.write("Here's where you can make predictions based on the data:")
 
-    # Load the saved model from disk
-    with open('svm_model.pkl', 'rb') as f:
-        svm_model = pickle.load(f)
-
-    # Define a function to make predictions on new data
-    def predict_diagnosis(data):
-        X_new = pd.DataFrame(data, index=[0])
-        preprocessor = load_preprocessor() # load preprocessor from pickle file
-        X_new = preprocessor.transform(X_new)
-        feature_names = preprocessor.get_feature_names_out() # call get_feature_names_out directly on preprocessor
-        svm_model = load_svm_model() # load SVM model from pickle file
-        y_pred = svm_model.predict(X_new)
-        return y_pred[0], feature_names
-
-
     # Load data
     df = pd.read_csv('data.csv')
-
-
 
     st.write("Enter the values below to predict the diagnosis.")
     radius_mean = st.slider("Radius Mean", 6.98, 28.11, 16.17)
@@ -141,7 +163,8 @@ def page_predictions():
     diagnosis = predict_diagnosis(data)
 
     # Display the prediction to the user
-    st.write("The predicted diagnosis is:", diagnosis)
+    st.write("The predicted diagnosis is:", diagnosis[0])
+    st.write("The features used for prediction are:", diagnosis[1])
 
 
 # Define function for page 4: Conclusions
