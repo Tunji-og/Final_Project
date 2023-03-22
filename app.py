@@ -6,7 +6,7 @@
 
 
 
-
+import numpy as np
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -115,7 +115,6 @@ def load_svm_model():
 def predict_diagnosis(data):
     X_new = pd.DataFrame(data, index=[0])
     preprocessor = load_preprocessor() # load preprocessor from pickle file
-    X_new = X_new.fillna(0)
     
     # extract the ColumnTransformer object and feature names
     column_transformer = preprocessor.named_transformers_['preprocessor']
