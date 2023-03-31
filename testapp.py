@@ -4,9 +4,6 @@ from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
-from sklearn.metrics import classification_report
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Load the Wisconsin Breast Cancer dataset
 data = load_breast_cancer()
@@ -47,14 +44,3 @@ if button:
         st.write('The tumor is benign.')
     else:
         st.write('The tumor is malignant.')
-
-    # Generate a classification report
-    y_pred = svm_model.predict(X_test_scaled)
-    report = classification_report(y_test, y_pred, target_names=['benign', 'malignant'], output_dict=True)
-    report_df = pd.DataFrame(report).transpose()
-
-    # Plot the classification report
-    st.subheader('Classification Report:')
-    fig, ax = plt.subplots(figsize=(5, 3))
-    sns.heatmap(report_df.iloc[:-1, :].transpose(), annot=True, cmap='Blues', ax=ax)
-    st.pyplot(fig)
