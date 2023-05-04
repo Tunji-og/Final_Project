@@ -18,10 +18,7 @@ import plotly.express as px
 # Define function for page 3: Group Members
 def page_group_members():
     st.title("PREDICTIVE MODEL FOR BREAST CANCER DIAGNOSIS USING MACHINE LEARNING TECHNIQUES")
-    st.title("BY:")
-    st.title("Ogunsusi, Adetunji Gabriel")
-    st.title("Olaogun, Tamilore Kayode")
-
+    st.title("Group 2's Final Year Project's Data Analysis/Machine Learning Component\n\nComputer Science Department, School of Computing and Engineering Sciences, Babcock University, Ilishan-Remo, Ogun State, Nigeria.\n\nGroup 2 Members:\n\n1. Ogunsusi, Adetunji Gabriel 19/2500\n2. Okoye, Adaora Jessica 19/0686\n\nGroup Project Supervisor: Ernest E. Onuiri, PHD\n\r")
     # Load image from URL
     url = "https://images.pexels.com/photos/579474/pexels-photo-579474.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
     st.image(url, caption=" ")
